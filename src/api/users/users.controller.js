@@ -64,6 +64,12 @@ var controller = {
       return res.status(401).send(info);
     })(req, res, next);
   },
+  logout: function (req, res) {
+    req.logout();
+    res.status(200).json({
+      status: 'Successfully logged out'
+    });
+  },
   me: function (req, res, next) {
     var { payload: { id } } = req;
 

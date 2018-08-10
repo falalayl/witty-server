@@ -7,5 +7,6 @@ var auth = require('../../services/auth/jwt');
 router.post('/register', auth.optional, controller.register); 
 router.post('/login', auth.optional, controller.login); 
 router.get('/me', auth.required, controller.me); 
+router.get('/logout', controller.logout);
 
 module.exports = router;
