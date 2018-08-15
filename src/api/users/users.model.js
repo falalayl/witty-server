@@ -7,12 +7,11 @@ var Schema = mongoose.Schema;
 var UsersSchema = new Schema({
   email: {
     type: String,
-    unique: true
+    unique: true,
+    lowercase: true,
+    required: true
   },
-  name: {
-    first: String,
-    last: String
-  },
+  name: { type: String, default: 'Witty User' },
   hash: String,
   salt: String,
 });
@@ -20,7 +19,7 @@ var UsersSchema = new Schema({
 // Validate empty email
 UsersSchema
   .path('email')
-  .validate(function(email) {
+  .validate(function (email) {
     return email.length;
   }, 'Email cannot be blank');
 
@@ -34,23 +33,23 @@ UsersSchema
 // Validate email is not taken
 UsersSchema
   .path('email')
-  .validate(function(value) {
+  .validate(function (value) {
     return this.constructor.findOne({ email: value }).exec()
       .then(user => {
-        if(user) {
-          if(this.id === user.id) {
+        if (user) {
+          if (this.id === user.id) {
             return true;
           }
           return false;
         }
         return true;
       })
-      .catch(function(err) {
+      .catch(function (err) {
         throw err;
       });
   }, 'The specified email address is already in use.');
 
-var validatePresenceOf = function(value) {
+var validatePresenceOf = function (value) {
   return value && value.length;
 };
 
@@ -67,7 +66,7 @@ UsersSchema.methods.validatePassword = function (password) {
 UsersSchema.methods.generateJWT = function () {
   var today = new Date();
   var expirationDate = new Date(today);
-  expirationDate.setDate(today.getDate() + 60);
+  expirationDate.setDate(today.getDate() + 30);
 
   return jwt.sign({
     email: this.email,
@@ -80,7 +79,7 @@ UsersSchema.methods.toAuthJSON = function () {
   return {
     _id: this._id,
     email: this.email,
-    name: this.name.first + ' ' + this.name.last,
+    name: this.name,
     token: this.generateJWT(),
   };
 };
