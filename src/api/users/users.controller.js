@@ -81,7 +81,39 @@ var controller = {
 
         return res.json({ user: user.toAuthJSON() });
       });
-  }
+    },
+    getAll: function (req, res) {
+      Users.find().exec()
+        .then(respondWithResult(res))
+        .catch(handleError(res));
+      // var apiKey = req.query.apiKey;
+      // var name = req.query.name;
+      // var q = {
+      //   active: true
+      // };
+      // if (name) {
+      //   q = {
+      //     active: true,
+      //     name: name
+      //   };
+      // }
+      // if (apiKey === 'this_is_my_token') {
+      //   // Categories.find(q).exec()
+      //   // .then(respondWithResult(res))
+      //   // .catch(handleError(res));
+      //   Categories.find(q).exec(function (err, data) {
+      //     if (err) res.sendStatus(403);
+      //     res.send(data.map(x => {
+      //       return {
+      //         CategoryName: x.name,
+      //         Budget: x.budget,
+      //       };
+      //     }));
+      //   });
+      // } else {
+      //   res.status(403).send('Unauthorized Access');
+      // }
+    }
 };
 
 module.exports = controller;
