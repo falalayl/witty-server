@@ -1,0 +1,44 @@
+var mongoose = require('mongoose');
+// var Users = require('../models/users');
+var Schema = mongoose.Schema;
+
+var WalletSchema = new Schema({
+    period: {
+        period: String,
+        name: {
+            type: String,
+            required: true,
+        },
+        budget: {
+            type: Number,
+            required: false
+        },
+        expense: [
+            {
+                desc: { type: String, lowercase: false },
+                amount: Number,
+                date: Date
+            },
+        ],
+        active: { type: Boolean, default: false },
+    }
+
+
+    // _user: { type: Schema.Types.ObjectId, ref: Users },
+    // budget: [
+    //     {
+    //         period: Date,
+    //         name: { type: String, required: true, lowercase: true },
+    //         budget: { type: Number, required: true },
+    //         expense: [
+    //             {
+    //                 desc: { type: String, lowercase: true },
+    //                 amount: Number,
+    //                 date: Date
+    //             }
+    //         ],
+    //         active: { type: Boolean, default: true }
+    //     }]
+});
+
+module.exports = mongoose.model('Wallet', WalletSchema);

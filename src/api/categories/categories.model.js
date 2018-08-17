@@ -3,16 +3,20 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var CategorySchema = new Schema({
-  name: { type: String, required: true, lowercase: true, unique: true },
-  budget: { type: Number, required: true },
+  name: { 
+    type: String, 
+    required: true,
+    ref: 'User'
+  },
+  budget: { type: Number, required: false },
   expense: [
     {
-      desc: { type: String, lowercase: true },
+      desc: { type: String, lowercase: false },
       amount: Number,
       date: Date
     },
   ],
-  active: { type: Boolean, default: true },
+  active: { type: Boolean, default: false },
 
   // _user: { type: Schema.Types.ObjectId, ref: Users },
   // budget: [

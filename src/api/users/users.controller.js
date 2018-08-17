@@ -79,7 +79,7 @@ var controller = {
           return res.sendStatus(400);
         }
 
-        return res.json({ user: user.toAuthJSON() });
+        return res.json({ user: user.meJSON() });
       });
     },
     getAll: function (req, res) {

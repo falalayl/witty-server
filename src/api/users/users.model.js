@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 
+var Budget = require('../budget/budget.model');
+
 var Schema = mongoose.Schema;
 
 var UsersSchema = new Schema({
@@ -53,6 +55,20 @@ var validatePresenceOf = function (value) {
   return value && value.length;
 };
 
+UsersSchema
+  .post('save', (doc) => {
+    Budget.create({
+      user: doc._id,
+      budget: []
+    })
+      .then(() => {
+        console.log('Astig');
+      })
+      .catch(() => {
+        console.log('Yun lang');
+      });
+  });
+
 UsersSchema.methods.setPassword = function (password) {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
@@ -81,6 +97,14 @@ UsersSchema.methods.toAuthJSON = function () {
     email: this.email,
     name: this.name,
     token: this.generateJWT(),
+  };
+};
+
+UsersSchema.methods.meJSON = function () {
+  return {
+    _id: this._id,
+    email: this.email,
+    name: this.name
   };
 };
 
