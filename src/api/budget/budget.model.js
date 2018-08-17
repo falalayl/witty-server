@@ -11,8 +11,10 @@ var BudgetSchema = new Schema({
     budget: [{
         period: String,
         wallets: [{
-            _id: String,
-            ref: 'Wallet'
+            _id:{
+                type:String,
+                ref: 'Wallet'
+            }
         }]
     }]
     // budget: [{
