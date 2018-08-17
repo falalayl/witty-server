@@ -3,26 +3,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var WalletSchema = new Schema({
-    period: {
-        period: String,
-        name: {
-            type: String,
-            required: true,
-        },
-        budget: {
-            type: Number,
-            required: false
-        },
-        expense: [
-            {
-                desc: { type: String, lowercase: false },
-                amount: Number,
-                date: Date
-            },
-        ],
-        active: { type: Boolean, default: false },
-    }
-
+    _id: String,
+    type: String,
+    amount: Number,
+    transactions:[{
+        _id: String, //transaction._id
+        ref: 'Transaction'
+    }]
 
     // _user: { type: Schema.Types.ObjectId, ref: Users },
     // budget: [

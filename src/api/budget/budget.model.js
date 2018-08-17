@@ -8,7 +8,13 @@ var BudgetSchema = new Schema({
         required: true,
         ref: 'User'
     },
-    budget: []
+    budget: [{
+        period: String,
+        wallets: [{
+            _id: String,
+            ref: 'Wallet'
+        }]
+    }]
     // budget: [{
     //     m1: {
     //         type: String,

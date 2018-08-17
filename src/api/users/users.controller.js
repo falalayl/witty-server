@@ -2,6 +2,7 @@ var passport = require('passport');
 
 var Users = require('./users.model.js');
 
+
 var controller = {
   register: function (req, res, next) {
     var { body: { user } } = req;
