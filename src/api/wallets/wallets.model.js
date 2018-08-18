@@ -3,12 +3,19 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var WalletSchema = new Schema({
-    _id: String,
-    type: String,
+    name: {
+        type: String,
+        required:true
+    },
+    user: {
+        type: String,
+        ref: 'User'
+    },
+    type: String, 
     amount: Number,
-    transactions:[{
+    transactions: [{
         _id: String, //transaction._id
-        ref: 'Transaction'
+        // ref: 'Transaction'
     }]
 
     // _user: { type: Schema.Types.ObjectId, ref: Users },
@@ -27,5 +34,7 @@ var WalletSchema = new Schema({
     //         active: { type: Boolean, default: true }
     //     }]
 });
+
+
 
 module.exports = mongoose.model('Wallet', WalletSchema);
