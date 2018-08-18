@@ -4,28 +4,28 @@ var handler = require('../../services/handler');
 var controller = {
     getEntries: function (req, res) {
         return Wallet.find()
-            .populate('first model', 'fields or minus fields')
-            .populate({ path: 'user', select: 'name' })
-            .populate({
-                path: 'second model',
-                select: 'field from second model',
-                populate: { //nest from second model
-                    path: '',
-                    select: ''
-                }
-            })
-            .select('-__v')
+            // .populate('first model', 'fields or minus fields')
+            // .populate({ path: 'user', select: 'name' })
+            // .populate({
+            //     path: 'second model',
+            //     select: 'field from second model',
+            //     populate: { //nest from second model
+            //         path: '',
+            //         select: ''
+            //     }
+            // })
+            // .select('-__v')
             .exec()
-            .then((datas) => {
-                res.status(200).send(data.map(data => {
-                    return {
-                        id: data.id,
-                        name: data.name,
-                        emp: data.emp.length !==0 ? data.emp: 'No Emp'
-                    };
-                }));
-            })
-            //.then(handler.respondWithResult(res))
+            // .then((datas) => {
+            //     res.status(200).send(data.map(data => {
+            //         return {
+            //             id: data.id,
+            //             name: data.name,
+            //             emp: data.emp.length !==0 ? data.emp: 'No Emp'
+            //         };
+            //     }));
+            // })
+            .then(handler.respondWithResult(res))
             .catch(handler.handleError(res));
     },
     getEntry: function (req, res) {
