@@ -6,9 +6,10 @@ var CategorySchema = new Schema({
   name: { 
     type: String, 
     required: true,
-    ref: 'User'
   },
-  budget: { type: Number, required: false },
+  budget: { 
+    type: Number, required: false 
+  },
   expense: [
     {
       desc: { type: String, lowercase: false },
