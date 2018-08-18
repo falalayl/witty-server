@@ -9,13 +9,7 @@ var BudgetSchema = new Schema({
         ref: 'User'
     },
     budget: [{
-        period: String,
-        wallets: [{
-            _id:{
-                type:String,
-                ref: 'Wallet'
-            }
-        }]
+        period: String
     }]
     // budget: [{
     //     m1: {
@@ -31,6 +25,9 @@ var BudgetSchema = new Schema({
     //         ref: 'Ref1'
     //     }
     // }]
+
+    
 });
+
 
 module.exports = mongoose.model('Budget', BudgetSchema);

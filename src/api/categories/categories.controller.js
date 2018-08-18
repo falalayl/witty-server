@@ -4,7 +4,6 @@ var handler = require('../../services/handler');
 var controller = {
   getEntries: function (req, res) {
     return Categories.find()
-      .populate('name')
       .exec()
       .then(handler.respondWithResult(res))
       .catch(handler.handleError(res));

@@ -4,7 +4,8 @@ var handler = require('../../services/handler');
 var controller = {
     getEntries: function (req, res) {
         return Budget.find()
-            .populate('_user')
+            .populate('user', '-_id -__v -salt -hash')
+            .select('-__v')
             .exec()
             .then(handler.respondWithResult(res))
             .catch(handler.handleError(res));

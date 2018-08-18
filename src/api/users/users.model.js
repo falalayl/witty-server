@@ -6,7 +6,7 @@ var Budget = require('../budget/budget.model');
 
 var Schema = mongoose.Schema;
 
-var UsersSchema = new Schema({
+var UserSchema = new Schema({
   email: {
     type: String,
     unique: true,
@@ -16,24 +16,33 @@ var UsersSchema = new Schema({
   name: { type: String, default: 'Witty User' },
   hash: String,
   salt: String,
+},{
+  toJSON: {
+    virtuals: true
+  },
+  toObject: {
+    virtuals: true
+  }
 });
 
 // Validate empty email
-UsersSchema
+UserSchema
   .path('email')
   .validate(function (email) {
     return email.length;
   }, 'Email cannot be blank');
 
 // // Validate empty password
-// UsersSchema
+// UserSchema
 //   .path('password')
 //   .validate(function(password) {
 //     return password.length;
 //   }, 'Password cannot be blank');
 
 // Validate email is not taken
-UsersSchema
+
+
+UserSchema
   .path('email')
   .validate(function (value) {
     return this.constructor.findOne({ email: value }).exec()
@@ -55,7 +64,7 @@ var validatePresenceOf = function (value) {
   return value && value.length;
 };
 
-UsersSchema
+UserSchema
   .post('save', (doc) => {
     Budget.create({
       user: doc._id,
@@ -69,17 +78,17 @@ UsersSchema
       });
   });
 
-UsersSchema.methods.setPassword = function (password) {
+UserSchema.methods.setPassword = function (password) {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
 };
 
-UsersSchema.methods.validatePassword = function (password) {
+UserSchema.methods.validatePassword = function (password) {
   var hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
   return this.hash === hash;
 };
 
-UsersSchema.methods.generateJWT = function () {
+UserSchema.methods.generateJWT = function () {
   var today = new Date();
   var expirationDate = new Date(today);
   expirationDate.setDate(today.getDate() + 30);
@@ -91,7 +100,7 @@ UsersSchema.methods.generateJWT = function () {
   }, 'secret');
 };
 
-UsersSchema.methods.toAuthJSON = function () {
+UserSchema.methods.toAuthJSON = function () {
   return {
     _id: this._id,
     email: this.email,
@@ -100,7 +109,7 @@ UsersSchema.methods.toAuthJSON = function () {
   };
 };
 
-UsersSchema.methods.meJSON = function () {
+UserSchema.methods.meJSON = function () {
   return {
     _id: this._id,
     email: this.email,
@@ -108,4 +117,12 @@ UsersSchema.methods.meJSON = function () {
   };
 };
 
-module.exports = mongoose.model('User', UsersSchema);
+UserSchema
+  .virtual('wallets', {
+    ref: 'Wallet',
+    localField: '_id',
+    foreignField: 'user',
+    justOne: false
+  });
+
+module.exports = mongoose.model('User', UserSchema);

@@ -5,9 +5,9 @@ var controller = require('./users.controller');
 var auth = require('../../services/auth/jwt');
 
 router.get('/', controller.getAll);
-router.post('/register', auth.optional, controller.register); 
-router.post('/login', auth.optional, controller.login); 
-router.get('/me', auth.required, controller.me); 
+router.post('/register', auth.optional, controller.register);
+router.post('/login', auth.optional, controller.login);
+router.get('/me', auth.required, controller.me);
 router.get('/logout', controller.logout);
 
 module.exports = router;
