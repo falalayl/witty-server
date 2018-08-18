@@ -94,6 +94,15 @@ var controller = {
       .exec()
       .then(handler.respondWithResult(res))
       .catch(handler.handleError(res));
+  },
+  destroy: function (req, res) {
+    if (req.body._id) {
+      Reflect.deleteProperty(req.body, '_id');
+    }
+    return Categories.findByIdAndRemove(req.params.id).exec()
+      .then(handler.handleEntityNotFound(res))
+      .then(handler.respondWithResult(res, 204))
+      .catch(handler.handleError(res));
   }
 };
 
