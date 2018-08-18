@@ -99,7 +99,7 @@ var controller = {
     if (req.body._id) {
       Reflect.deleteProperty(req.body, '_id');
     }
-    return Categories.findByIdAndRemove(req.params.id).exec()
+    return Users.findByIdAndRemove(req.params.id).exec()
       .then(handler.handleEntityNotFound(res))
       .then(handler.respondWithResult(res, 204))
       .catch(handler.handleError(res));
