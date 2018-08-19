@@ -4,10 +4,35 @@ var handler = require('../../services/handler');
 var controller = {
     getEntries: function (req, res) {
         return Budget.find()
-            .populate('user', '-_id -__v -salt -hash')
-            .select('-__v')
+            .populate({
+                path: 'budget.wallets',
+                select: '-__v',
+                populate: {
+                    path: 'transactions',
+                    select: '-__v'
+                }
+            })
             .exec()
-            .then(handler.respondWithResult(res))
+            // .then((entries) => {
+            //     res.status(200).send(entries.map(data => {
+            //         return {
+            //             id: data.id,
+            //             user: data.user,
+            //             budget: data.budget.length !== 0 ? data.budget : 'User has no budget'
+            //         };
+            //     }));
+            // })
+            .then((entries) => {
+                res.status(200).send(entries.map(entry => {
+                    return {
+                        id: entry.id,
+                        userId: entry.user,
+                        wallets: entry.budget.wallets,
+                        transactions: entry.budget.wallets.transactions
+                    };
+                }));
+            })
+            //.then(handler.respondWithResult(res))
             .catch(handler.handleError(res));
     },
     getEntry: function (req, res) {
