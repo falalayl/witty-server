@@ -13,17 +13,21 @@ var UserSchema = new Schema({
     lowercase: true,
     required: true
   },
-  name: { type: String, default: 'Witty User' },
+  name: {
+    type: String,
+    default: 'Witty User'
+  },
   hash: String,
   salt: String,
-},{
-  toJSON: {
-    virtuals: true
-  },
-  toObject: {
-    virtuals: true
-  }
-});
+},
+  {
+    toJSON: {
+      virtuals: true
+    },
+    toObject: {
+      virtuals: true
+    }
+  });
 
 // Validate empty email
 UserSchema
@@ -118,8 +122,8 @@ UserSchema.methods.meJSON = function () {
 };
 
 UserSchema
-  .virtual('wallets', {
-    ref: 'Wallet',
+  .virtual('budgets', {
+    ref: 'Budget',
     localField: '_id',
     foreignField: 'user',
     justOne: false

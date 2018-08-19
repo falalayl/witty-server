@@ -86,11 +86,13 @@ var controller = {
   },
   getAll: function (req, res) {
     return Users.find()
-      .populate({
-        path: 'wallets',
-        select: 'name',
-        match: { user: Users._id }
-      })
+    .select('-salt -hash -__v -id')
+    .populate('budgets')
+      // .populate({
+      //   path: 'wallets',
+      //   select: 'name',
+      //   match: { user: Users._id }
+      // })
       .exec()
       .then(handler.respondWithResult(res))
       .catch(handler.handleError(res));
