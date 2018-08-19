@@ -11,6 +11,10 @@ var TransactionSchema = new Schema({
     amount: {
         type: Number,
         required: true
+    },
+    wallet: {
+        type: String,
+        ref: 'Wallet'
     }
 });
 
