@@ -29,22 +29,31 @@ var controller = {
             .catch(handler.handleError(res));
     },
     getEntry: function (req, res) {
-        return Wallet.findById(req.params.id).exec()
-            .then(handler.handleEntityNotFound(res))
-            .then((datas)=>{
-                res.status(200).send({
-                    id: datas.id,
-                    name: datas.name
-                })
-            })
-            //.then(handler.respondWithResult(res))
-            .catch(handler.handleError(res));
-    },
-    getOne: function (req, res) {
-        var userId = req.query.userID;
-        return Wallet.findOne({ user: userId })
+        return Wallet.findById(req.params.id)
             .exec()
             .then(handler.handleEntityNotFound(res))
+            // .then((datas) => {
+            //     res.status(200).send({
+            //         id: datas._id,
+            //         name: datas.name
+            //     })
+            // })
+            .then(handler.respondWithResult(res))
+            .catch(handler.handleError(res));
+    },
+    getMyWallets: function (req, res) {
+        var user = req.params.user
+        return Wallet.find({ user: user })
+            .select('-__v -user -id')
+            .populate('transactions', '-__v')
+            .exec()
+            .then(handler.handleEntityNotFound(res))
+            // .then((datas) => {
+            //     res.status(200).send({
+            //         id: datas._id,
+            //         name: datas.name
+            //     })
+            // })
             .then(handler.respondWithResult(res))
             .catch(handler.handleError(res));
     },

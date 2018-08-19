@@ -5,35 +5,39 @@ var Schema = mongoose.Schema;
 var WalletSchema = new Schema({
     name: {
         type: String,
-        required:true
+        required: true,
     },
     user: {
         type: String,
-        ref: 'User'
+        ref: 'User',
+        required: true,
+        ref: 'Budget'
     },
-    type: String, 
-    amount: Number,
-    transactions: [{
-        _id: String, //transaction._id
-        // ref: 'Transaction'
-    }]
+    type: {
+        type: String,
+        required: true
+    },
+    amount: {
+        type: Number,
+        required: true
+    }
+},
+    {
+        toJSON: {
+            virtuals: true
+        },
+        toObject: {
+            virtuals: true
+        }
+    });
 
-    // _user: { type: Schema.Types.ObjectId, ref: Users },
-    // budget: [
-    //     {
-    //         period: Date,
-    //         name: { type: String, required: true, lowercase: true },
-    //         budget: { type: Number, required: true },
-    //         expense: [
-    //             {
-    //                 desc: { type: String, lowercase: true },
-    //                 amount: Number,
-    //                 date: Date
-    //             }
-    //         ],
-    //         active: { type: Boolean, default: true }
-    //     }]
-});
+WalletSchema
+    .virtual('transactions', {
+        ref: 'Transaction',
+        localField: '_id',
+        foreignField: 'wallet',
+        justOne: false
+    });
 
 
 
