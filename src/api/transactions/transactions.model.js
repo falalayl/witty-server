@@ -7,7 +7,10 @@ var TransactionSchema = new Schema({
         type: String,
         required: true,
     },
-    date: Date,
+    date: {
+        type: Date,
+        default: new Date()
+    },
     amount: {
         type: Number,
         required: true
