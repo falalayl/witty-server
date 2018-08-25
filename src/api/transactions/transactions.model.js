@@ -9,7 +9,7 @@ var TransactionSchema = new Schema({
     },
     date: {
         type: Date,
-        default: new Date()
+        default: new Date(Date.now())
     },
     amount: {
         type: Number,
