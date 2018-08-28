@@ -57,7 +57,7 @@ var controller = {
             .then(handler.respondWithResult(res))
             .catch(handler.handleError(res));
     },
-    create: function (req, res) {
+    create: function (req, res) {        
         return Wallet.create(req.body)
             .then(handler.respondWithResult(res, 201))
             .catch(handler.handleError(res));

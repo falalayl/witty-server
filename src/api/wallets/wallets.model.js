@@ -6,6 +6,7 @@ var WalletSchema = new Schema({
     name: {
         type: String,
         required: true,
+        lowercase: true
     },
     user: {
         type: String,
@@ -15,7 +16,8 @@ var WalletSchema = new Schema({
     },
     type: {
         type: String,
-        required: true
+        required: true,
+        lowercase: true
     },
     amount: {
         type: Number,
@@ -39,6 +41,23 @@ WalletSchema
         justOne: false
     });
 
+WalletSchema
+    .path('type')
+    .validate(function (value) {
+        return this.constructor.findOne({ type: value, name: this.name }).exec()
+            .then(wallet => {
+                if (wallet) {
+                    if (this.id === wallet.id) {
+                        return true;
+                    }
+                    return false;
+                }
+                return true;
+            })
+            .catch(function (err) {
+                throw err;
+            });
+    }, 'Wallet name already exists in that type, enter a new name!');
 
 
 module.exports = mongoose.model('Wallet', WalletSchema);
