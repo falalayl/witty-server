@@ -46,7 +46,7 @@ var controller = {
         return Wallet.find({ user: user })
             .select('-__v -user -id')
             .populate('transactions', '-__v')
-            .populate({ path: 'category', select: 'desc' })
+            .populate({ path: 'category', select: '-__v' })
             .exec()
             .then(handler.handleEntityNotFound(res))
             // .then((datas) => {

@@ -10,6 +10,10 @@ var controller = {
                 populate: {
                     path: 'transactions',
                     select: '-__v'
+                },
+                populate: {
+                    path: 'category',
+                    select: '-__v'
                 }
             })
             .exec()
@@ -28,6 +32,7 @@ var controller = {
                         id: entry.id,
                         userId: entry.user,
                         wallets: entry.budget.wallets,
+                        category: entry.budget.wallets.category,
                         transactions: entry.budget.wallets.transactions
                     };
                 }));
