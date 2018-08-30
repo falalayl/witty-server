@@ -19,6 +19,17 @@ var TransactionSchema = new Schema({
         type: String,
         ref: 'Wallet'
     }
-});
+},
+    {
+        id: false,
+        versionKey: false,
+        toJSON: {
+            virtuals: true
+        },
+        toObject: {
+            virtuals: true
+        }
+
+    });
 
 module.exports = mongoose.model('Transaction', TransactionSchema);

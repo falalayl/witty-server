@@ -29,6 +29,8 @@ var WalletSchema = new Schema({
     }
 },
     {
+        id: false,
+        versionKey: false,
         toJSON: {
             virtuals: true
         },

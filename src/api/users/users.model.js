@@ -21,6 +21,8 @@ var UserSchema = new Schema({
   salt: String,
 },
   {
+    id: false,
+    versionKey: false,
     toJSON: {
       virtuals: true
     },

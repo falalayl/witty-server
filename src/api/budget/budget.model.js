@@ -17,13 +17,15 @@ var BudgetSchema = new Schema({
     },
 },
     {
+        id: false,
+        versionKey: false,
         toJSON: {
             virtuals: true
         },
         toObject: {
             virtuals: true
         }
-    }); 
+    });
 
 BudgetSchema
     .virtual('budget.wallets', {
