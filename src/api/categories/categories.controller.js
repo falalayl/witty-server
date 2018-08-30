@@ -4,6 +4,8 @@ var handler = require('../../services/handler');
 var controller = {
   getEntries: function (req, res) {
     return Categories.find()
+      .select('-__v')
+      .populate('wallets', '-__v')
       .exec()
       .then(handler.respondWithResult(res))
       .catch(handler.handleError(res));

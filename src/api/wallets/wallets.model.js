@@ -22,6 +22,10 @@ var WalletSchema = new Schema({
     amount: {
         type: Number,
         required: true
+    },
+    categoryId: {
+        type: String,
+        ref: 'Category'
     }
 },
     {
@@ -38,6 +42,14 @@ WalletSchema
         ref: 'Transaction',
         localField: '_id',
         foreignField: 'wallet',
+        justOne: false
+    });
+
+WalletSchema
+    .virtual('category', {
+        ref: 'Category',
+        localField: 'categoryId',
+        foreignField: '_id',
         justOne: false
     });
 

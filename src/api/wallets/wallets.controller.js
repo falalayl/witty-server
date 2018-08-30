@@ -46,6 +46,7 @@ var controller = {
         return Wallet.find({ user: user })
             .select('-__v -user -id')
             .populate('transactions', '-__v')
+            .populate({ path: 'category', select: 'desc' })
             .exec()
             .then(handler.handleEntityNotFound(res))
             // .then((datas) => {
@@ -57,7 +58,7 @@ var controller = {
             .then(handler.respondWithResult(res))
             .catch(handler.handleError(res));
     },
-    create: function (req, res) {        
+    create: function (req, res) {
         return Wallet.create(req.body)
             .then(handler.respondWithResult(res, 201))
             .catch(handler.handleError(res));

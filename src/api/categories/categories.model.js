@@ -3,37 +3,35 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var CategorySchema = new Schema({
-  name: { 
-    type: String, 
-    required: true,
+  _id: {
+    type: String,
+    lowercase: true,
   },
-  budget: { 
-    type: Number, required: false 
+  desc: {
+    type: String,
+    lowercase: true,
   },
-  expense: [
-    {
-      desc: { type: String, lowercase: false },
-      amount: Number,
-      date: Date
-    },
-  ],
-  active: { type: Boolean, default: false },
+  icon: {
+    type: String,
+    lowercase: true
+  }
 
-  // _user: { type: Schema.Types.ObjectId, ref: Users },
-  // budget: [
-  //     {
-  //         period: Date,
-  //         name: { type: String, required: true, lowercase: true },
-  //         budget: { type: Number, required: true },
-  //         expense: [
-  //             {
-  //                 desc: { type: String, lowercase: true },
-  //                 amount: Number,
-  //                 date: Date
-  //             }
-  //         ],
-  //         active: { type: Boolean, default: true }
-  //     }]
-});
+},
+  {
+    toJSON: {
+      virtuals: true
+    },
+    toObject: {
+      virtuals: true
+    }
+  });
+
+CategorySchema
+  .virtual('wallets', {
+    ref: 'Wallet',
+    localField: '_id',
+    foreignField: 'category',
+    justOne: false
+  });
 
 module.exports = mongoose.model('Category', CategorySchema);
