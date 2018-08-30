@@ -30,7 +30,8 @@ var controller = {
 
     return finalUser.save()
       .then(() => res.json({ user: finalUser.toAuthJSON() }))
-      .catch((err) => res.status(400).send({ errors: err.errors }));
+      .catch((err) => res.status(400).send(err.message));
+      //.catch((err) => res.status(400).send({ errors: err.errors }));
   },
   login: function (req, res, next) {
     var { body: { user } } = req;
