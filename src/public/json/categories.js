@@ -1,7 +1,7 @@
 var categoryEntry = [
   {
     _id: 'fnb',
-    desc: 'food and beverages',
+    desc: 'food and beverage',
     icon: 'pizza'
   },
   {

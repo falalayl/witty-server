@@ -12,7 +12,7 @@ var auth = require('../../services/auth/jwt');
 // DELETE: api/categories/:id
 
 router.get('/', auth.optional, controller.getEntries);
-router.get('/:id', auth.optional, controller.getEntry);
+router.get('/:id', auth.required, controller.getTransactions);
 router.get('/user/:user', auth.required,controller.getMyWallets);
 router.post('/', auth.required, controller.create);
 router.put('/:id', auth.required, controller.update);
