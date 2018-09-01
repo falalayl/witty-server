@@ -61,7 +61,7 @@ WalletSchema
         return this.constructor.findOne({ type: value, name: this.name }).exec()
             .then(wallet => {
                 if (wallet) {
-                    if (this.id === wallet.id) {
+                    if (this._id === wallet._id) {
                         return true;
                     }
                     return false;
@@ -71,7 +71,7 @@ WalletSchema
             .catch(function (err) {
                 throw err;
             });
-    }, 'Wallet name already exists in that type, enter a new name!');
+    }, 'Wallet name already exists in that type, enter a new wallet name!');
 
 
 module.exports = mongoose.model('Wallet', WalletSchema);

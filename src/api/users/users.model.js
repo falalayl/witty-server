@@ -54,7 +54,7 @@ UserSchema
     return this.constructor.findOne({ email: value }).exec()
       .then(user => {
         if (user) {
-          if (this.id === user.id) {
+          if (this._id === user._id) {
             return true;
           }
           return false;
