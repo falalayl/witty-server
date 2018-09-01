@@ -51,27 +51,33 @@ var controller = {
       .populate('category')
       .exec()
       .then(handler.handleEntityNotFound(res))
-      .then((wallets) => {
-
-        var transaction = (wallet) => {
-          var total = 0;
-          return wallet.transactions.map(transaction => {
-            return total + transaction.amount;
-          })
+      .then(wallets => {
+        var savings = 0;
+        var data = {
+          userWallets: wallets.map(wallet => {
+            var total = 0;
+            wallet.transactions.forEach(transaction => {
+              total = total + transaction.amount
+            });
+            savings = savings + wallet.amount;
+            return {
+              walletName: wallet.name,
+              amountPerWallet: wallet.amount,
+              totalExpensesPerWallet: total
+            };
+          }),
+          userWalletsAmountTotal: savings
         }
-        
-        var forecast = datas.map(wallet => {   
-          return {
-            total: wallet.ammount,
-            transactions: transaction(wallet)
-          };
-        })
 
-        res.status(200).send({
-          id: datas._id,
-          // name: datas.name,
-          forecast: forecast
-        })
+        res.send(data);
+
+        // var totalAmount = 0;
+        // var feed = wallet.foreach(amount => {
+        //   totalAmount = totalAmount + amount.amount
+        // });
+
+        // console.log(totalAmount);
+        // res.send(wallet);
       })
       // .then(handler.respondWithResult(res))
       .catch(handler.handleError(res));
