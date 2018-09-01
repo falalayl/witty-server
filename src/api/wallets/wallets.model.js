@@ -44,7 +44,13 @@ WalletSchema
         ref: 'Transaction',
         localField: '_id',
         foreignField: 'wallet',
-        justOne: false
+        justOne: false,
+        options: {
+          sort: {
+            date: 1
+          },
+          // limit: 5
+        }
     });
 
 WalletSchema
