@@ -41,6 +41,7 @@ TransactionSchema
     Wallets.findById(this.wallet, function(err, data) {
       if (err) throw err;
       this.user = data.user;
+      next();
     });
   });
 
