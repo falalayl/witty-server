@@ -53,6 +53,11 @@ WalletSchema
         }
     });
 
+// WalletSchema
+// .virtual('forecast', function () {
+//   return 'Hello';
+// });
+
 WalletSchema
     .virtual('category', {
         ref: 'Category',
