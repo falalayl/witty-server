@@ -19,9 +19,6 @@ var TransactionSchema = new Schema({
   wallet: {
     type: String,
     ref: 'Wallet'
-  },
-  user: {
-    type: String
   }
 },
   {
@@ -35,15 +32,5 @@ var TransactionSchema = new Schema({
     }
 
   });
-
-TransactionSchema
-  .pre('save', function (next) {
-    Wallets.findById(this.wallet, function(err, data) {
-      if (err) throw err;
-      this.user = data.user;
-      next();
-    });
-  });
-
 
 module.exports = mongoose.model('Transaction', TransactionSchema);
