@@ -87,7 +87,7 @@ var controller = {
   },
   getAll: function (req, res) {
     return Users.find()
-    .select('-salt -hash -__v -id')
+    .select('-salt -hash')
     .populate('budgets')
       // .populate({
       //   path: 'wallets',

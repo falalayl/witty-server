@@ -8,7 +8,7 @@ var WalletSchema = new Schema({
         required: true,
         lowercase: true
     },
-    user: {
+    user_id: {
         type: String,
         ref: 'User',
         required: true,
