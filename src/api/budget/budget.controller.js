@@ -6,33 +6,19 @@ var controller = {
         return Budget.find()
             .populate({
                 path: 'budget.wallets',
-                select: '-__v',
+                select: 'amount',
                 populate: {
                     path: 'transactions',
-                    select: '-__v'
-                },
-                populate: {
-                    path: 'category',
-                    select: '-__v'
+                    select: 'amount'
                 }
             })
             .exec()
-            // .then((entries) => {
-            //     res.status(200).send(entries.map(data => {
-            //         return {
-            //             id: data.id,
-            //             user: data.user,
-            //             budget: data.budget.length !== 0 ? data.budget : 'User has no budget'
-            //         };
-            //     }));
-            // })
             .then((entries) => {
                 res.status(200).send(entries.map(entry => {
                     return {
-                        id: entry.id,
-                        userId: entry.user,
+                        budgetId: entry._id,
+                        userId: entry.userId,
                         wallets: entry.budget.wallets,
-                        category: entry.budget.wallets.category,
                         transactions: entry.budget.wallets.transactions
                     };
                 }));
@@ -41,15 +27,33 @@ var controller = {
             .catch(handler.handleError(res));
     },
     getEntry: function (req, res) {
-        return Budget.findById(req.params.id).exec()
+        return Budget.findById(req.params.id)
+            .exec()
             .then(handler.handleEntityNotFound(res))
             .then(handler.respondWithResult(res))
             .catch(handler.handleError(res));
     },
     getOne: function (req, res) {
         var userId = req.query.userID;
-        return Budget.find(userId).exec()
-            .then(handler.handleEntityNotFound(res))
+        return Budget.find(userId)
+            .populate({
+                path: 'budget.wallets',
+                select: 'name amount',
+                populate: {
+                    path: 'transactions'
+                }
+            })
+            .exec()
+            .then((entries) => {
+                res.status(200).send(entries.map(entry => {
+                    return {
+                        budgetId: entry._id,
+                        userId: entry.userId,
+                        wallets: entry.budget.wallets !== 0 ? entry.budget.wallets : 'No wallets'
+                    };
+                }));
+            })
+            // .then(handler.handleEntityNotFound(res))
             .then(handler.respondWithResult(res))
             .catch(handler.handleError(res));
     },

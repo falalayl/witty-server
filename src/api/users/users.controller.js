@@ -31,7 +31,7 @@ var controller = {
     return finalUser.save()
       .then(() => res.json({ user: finalUser.toAuthJSON() }))
       .catch((err) => res.status(400).send(err.message));
-      //.catch((err) => res.status(400).send({ errors: err.errors }));
+    //.catch((err) => res.status(400).send({ errors: err.errors }));
   },
   login: function (req, res, next) {
     var { body: { user } } = req;
@@ -87,13 +87,7 @@ var controller = {
   },
   getAll: function (req, res) {
     return Users.find()
-    .select('-salt -hash')
-    .populate('budgets')
-      // .populate({
-      //   path: 'wallets',
-      //   select: 'name',
-      //   match: { user: Users._id }
-      // })
+      .select('-salt -hash')
       .exec()
       .then(handler.respondWithResult(res))
       .catch(handler.handleError(res));

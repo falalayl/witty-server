@@ -4,7 +4,7 @@ var handler = require('../../services/handler');
 var controller = {
     getEntries: function (req, res) {
         return Wallet.find()
-            .populate('transactions',)
+            .populate('transactions')
             .populate('category')
             .exec()
             .then((wallets) => {
@@ -23,13 +23,15 @@ var controller = {
     getTransactions: function (req, res) {
         return Wallet.findById(req.params.id)
             .populate('transactions')
+            .populate('category')
             .exec()
             .then(handler.handleEntityNotFound(res))
             .then((wallet) => {
                 res.status(200).send({
                     _id: wallet._id,
                     name: wallet.name,
-                    transactions: wallet.transactions.length !==0 ? wallet.transactions: 'No transactions'
+                    transactions: wallet.transactions.length !==0 ? wallet.transactions: 'No transactions',
+                    category: wallet.category
                 });
             })
             // .then(handler.respondWithResult(res))
@@ -37,9 +39,9 @@ var controller = {
     },
     getMyWallets: function (req, res) {
         var user = req.params.user
-        return Wallet.find({ user: user })
+        return Wallet.find({ userId: user })
             .populate('transactions')
-            .populate('category')
+            .populate('category', '-wallets')
             .exec()
             .then(handler.handleEntityNotFound(res))
             // .then((datas) => {
