@@ -4,40 +4,32 @@ var handler = require('../../services/handler');
 var controller = {
     getEntries: function (req, res) {
         return Wallet.find()
-            // .populate('first model', 'fields or minus fields')
-            // .populate({ path: 'user', select: 'name' })
-            // .populate({
-            //     path: 'second model',
-            //     select: 'field from second model',
-            //     populate: { //nest from second model
-            //         path: '',
-            //         select: ''
-            //     }
-            // })
-            // .select('-__v')
+            .populate('transactions',)
+            .populate('category')
             .exec()
-            // .then((datas) => {
-            //     res.status(200).send(data.map(data => {
-            //         return {
-            //             id: data.id,
-            //             name: data.name,
-            //             emp: data.emp.length !==0 ? data.emp: 'No Emp'
-            //         };
-            //     }));
-            // })
-            .then(handler.respondWithResult(res))
+            .then((wallets) => {
+                res.status(200).send(wallets.map(wallet => {
+                    return {
+                        _id: wallet._id,
+                        name: wallet.name,
+                        transactions: wallet.transactions.length !==0 ? wallet.transactions: 'No transactions',
+                        category: wallet.category.length !==0 ? wallet.transactions: 'No category'
+                    };
+                }));
+            })
+            // .then(handler.respondWithResult(res))
             .catch(handler.handleError(res));
     },
     getTransactions: function (req, res) {
         return Wallet.findById(req.params.id)
-            .populate('transactions', '-__v')
+            .populate('transactions')
             .exec()
             .then(handler.handleEntityNotFound(res))
             .then((wallet) => {
                 res.status(200).send({
                     _id: wallet._id,
                     name: wallet.name,
-                    transactions: wallet.transactions
+                    transactions: wallet.transactions.length !==0 ? wallet.transactions: 'No transactions'
                 });
             })
             // .then(handler.respondWithResult(res))

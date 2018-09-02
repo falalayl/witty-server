@@ -44,7 +44,6 @@ var controller = {
     getMyTransactions: function (req, res) {
         var user = req.params.user
         return Transaction.find({ user: user })
-            .select('-__v -user')
             .exec()
             .then(handler.handleEntityNotFound(res))
             // .then((datas) => {
