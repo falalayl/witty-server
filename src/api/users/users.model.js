@@ -73,7 +73,7 @@ var validatePresenceOf = function (value) {
 UserSchema
   .post('save', (doc) => {
     Budget.create({
-      user: doc._id,
+      userId: doc._id,
       budget: []
     })
       .then(() => {
@@ -122,13 +122,5 @@ UserSchema.methods.meJSON = function () {
     name: this.name
   };
 };
-
-UserSchema
-  .virtual('budgets', {
-    ref: 'Budget',
-    localField: '_id',
-    foreignField: 'user',
-    justOne: false
-  });
 
 module.exports = mongoose.model('User', UserSchema);

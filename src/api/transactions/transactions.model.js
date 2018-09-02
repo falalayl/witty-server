@@ -15,7 +15,7 @@ var TransactionSchema = new Schema({
         type: Number,
         required: true
     },
-    wallet_id: {
+    walletId: {
         type: String,
         ref: 'Wallet'
     }

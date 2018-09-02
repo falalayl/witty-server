@@ -32,7 +32,7 @@ CategorySchema
   .virtual('wallets', {
     ref: 'Wallet',
     localField: '_id',
-    foreignField: 'category',
+    foreignField: 'categoryId',
     justOne: false
   });
 

@@ -8,7 +8,7 @@ var WalletSchema = new Schema({
         required: true,
         lowercase: true
     },
-    user_id: {
+    userId: {
         type: String,
         ref: 'User',
         required: true,
@@ -43,7 +43,7 @@ WalletSchema
     .virtual('transactions', {
         ref: 'Transaction',
         localField: '_id',
-        foreignField: 'wallet',
+        foreignField: 'walletId',
         justOne: false,
         options: {
           sort: {

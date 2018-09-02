@@ -10,7 +10,7 @@ var period = n + y;
 
 
 var BudgetSchema = new Schema({
-    user: {
+    userId: {
         type: String,
         required: true,
         ref: 'User'
@@ -30,8 +30,8 @@ var BudgetSchema = new Schema({
 BudgetSchema
     .virtual('budget.wallets', {
         ref: 'Wallet',
-        localField: 'user',
-        foreignField: 'user',
+        localField: 'userId',
+        foreignField: 'userId',
         justOne: false
     });
 
