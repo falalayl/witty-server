@@ -12,8 +12,8 @@ var controller = {
                     return {
                         _id: wallet._id,
                         name: wallet.name,
-                        transactions: wallet.transactions.length !==0 ? wallet.transactions: 'No transactions',
-                        category: wallet.category.length !==0 ? wallet.transactions: 'No category'
+                        transactions: wallet.transactions.length !==0 ? wallet.transactions: 0,
+                        category: wallet.category.length !==0 ? wallet.category: 'No Category'
                     };
                 }));
             })
@@ -30,7 +30,7 @@ var controller = {
                 res.status(200).send({
                     _id: wallet._id,
                     name: wallet.name,
-                    transactions: wallet.transactions.length !==0 ? wallet.transactions: 'No transactions',
+                    transactions: wallet.transactions.length !==0 ? wallet.transactions: 0,
                     category: wallet.category
                 });
             })
