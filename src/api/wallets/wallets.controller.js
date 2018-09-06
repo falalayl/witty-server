@@ -1,6 +1,12 @@
 var Wallet = require('./wallets.model');
 var handler = require('../../services/handler');
 
+var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+var n = new Date();
+var m = month[n.getMonth()];
+var y = n.getFullYear();
+var period = m + " " + y;
+
 var controller = {
     getEntries: function (req, res) {
         return Wallet.find()
@@ -35,12 +41,6 @@ var controller = {
             .catch(handler.handleError(err));
     },
     getMyWallets: function (req, res) {
-        var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        var n = new Date();
-        var m = month[n.getMonth()];
-        var y = n.getFullYear();
-        var period = m + " " + y;
-
         var user = req.params.user
         return Wallet.find({ userId: user })
             .populate('transactions')
@@ -48,13 +48,52 @@ var controller = {
             .where('period', period)
             .exec()
             .then(handler.handleEntityNotFound(res))
-            // .then((datas) => {
-            //     res.status(200).send({
-            //         id: datas._id,
-            //         name: datas.name
-            //     })
-            // })
             .then(handler.respondWithResult(res))
+            .catch(handler.handleError(res));
+    },
+    overview: function (req, res) {
+        var user = req.params.user
+        return Wallet.find({ userId: user })
+            .populate('transactions')
+            .populate('category')
+            .where('period', period)
+            .exec()
+            .then(handler.handleEntityNotFound(res))
+            .then(wallets => {
+                var budgetTotal = 0;
+                var totalExpenses = 0;
+                var data = {
+                    userWallets: wallets.map(wallet => {
+                        var walletExpenses = 0;
+                        wallet.transactions.forEach(transaction => {
+                            walletExpenses = walletExpenses + transaction.amount
+                        });
+                        budgetTotal = budgetTotal + wallet.amount;
+                        totalExpenses = totalExpenses + walletExpenses;
+                        return {
+                            walletId: wallet._id,
+                            walletName: wallet.name,
+                            walletAmount: wallet.amount,
+                            walletExpenses: walletExpenses,
+                            walletCategory: wallet.categoryId,
+                            walletCategory: wallet.category
+                        };
+                    }),
+                    totalBudget: budgetTotal,
+                    totalExpenses: totalExpenses,
+                    average: totalBudget / userWallets.length
+                }
+                res.send(data);
+
+                // var totalAmount = 0;
+                // var feed = wallet.foreach(amount => {
+                //   totalAmount = totalAmount + amount.amount
+                // });
+
+                // console.log(totalAmount);
+                // res.send(wallet);
+            })
+            // .then(handler.respondWithResult(res))
             .catch(handler.handleError(res));
     },
     create: function (req, res) {
