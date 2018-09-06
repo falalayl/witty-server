@@ -5,15 +5,14 @@ var controller = {
     getEntries: function (req, res) {
         return Wallet.find()
             .populate('transactions')
-            .populate('category')
             .exec()
             .then((wallets) => {
                 res.status(200).send(wallets.map(wallet => {
                     return {
                         _id: wallet._id,
                         name: wallet.name,
-                        transactions: wallet.transactions.length !==0 ? wallet.transactions: 0,
-                        category: wallet.category.length !==0 ? wallet.category: 'No Category'
+                        transactions: wallet.transactions.length !== 0 ? wallet.transactions : 0,
+                        period: wallet.period
                     };
                 }));
             })
@@ -23,25 +22,30 @@ var controller = {
     getTransactions: function (req, res) {
         return Wallet.findById(req.params.id)
             .populate('transactions')
-            .populate('category')
             .exec()
             .then(handler.handleEntityNotFound(res))
             .then((wallet) => {
                 res.status(200).send({
                     _id: wallet._id,
                     name: wallet.name,
-                    transactions: wallet.transactions.length !==0 ? wallet.transactions: 0,
-                    category: wallet.category
+                    transactions: wallet.transactions.length !== 0 ? wallet.transactions : 0
                 });
             })
             // .then(handler.respondWithResult(res))
             .catch(handler.handleError(err));
     },
     getMyWallets: function (req, res) {
+        var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        var n = new Date();
+        var m = month[n.getMonth()];
+        var y = n.getFullYear();
+        var period = m + " " + y;
+
         var user = req.params.user
         return Wallet.find({ userId: user })
             .populate('transactions')
             .populate('category', '-wallets')
+            .where('period', period)
             .exec()
             .then(handler.handleEntityNotFound(res))
             // .then((datas) => {

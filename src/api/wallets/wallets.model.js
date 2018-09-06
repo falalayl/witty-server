@@ -26,6 +26,10 @@ var WalletSchema = new Schema({
     categoryId: {
         type: String,
         ref: 'Category'
+    },
+    period: {
+        type: String,
+        required: true
     }
 },
     {
@@ -46,10 +50,10 @@ WalletSchema
         foreignField: 'walletId',
         justOne: false,
         options: {
-          sort: {
-            date: 1
-          },
-          // limit: 5
+            sort: {
+                date: 1
+            },
+            // limit: 5
         }
     });
 
@@ -58,13 +62,13 @@ WalletSchema
         ref: 'Category',
         localField: 'categoryId',
         foreignField: '_id',
-        justOne: false
+        justOne: false,
     });
 
 WalletSchema
     .path('type')
     .validate(function (value) {
-        return this.constructor.findOne({ type: value, name: this.name }).exec()
+        return this.constructor.findOne({ type: value, name: this.name, period: this.period }).exec()
             .then(wallet => {
                 if (wallet) {
                     if (this._id === wallet._id) {
