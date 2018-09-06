@@ -28,6 +28,11 @@ var TransactionSchema = new Schema({
         },
         toObject: {
             virtuals: true
+        },
+        options: {
+            sort: {
+                date: -1
+            }
         }
 
     });
