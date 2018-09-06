@@ -1,7 +1,7 @@
 var categoryEntry = [
   {
     _id: 'fnb',
-    desc: 'food and beverage',
+    desc: 'food',
     icon: 'pizza'
   },
   {
@@ -12,7 +12,7 @@ var categoryEntry = [
   {
     _id: 'tra',
     desc: 'transportation',
-    icon: 'car'
+    icon: 'bus'
   },
   {
     _id: 'pc',
@@ -26,8 +26,33 @@ var categoryEntry = [
   },
   {
     _id: 'ent',
-    desc: 'entertainment and fun',
+    desc: 'entertainment',
     icon: 'game-controller-a'
+  },
+  {
+    _id: 'lei',
+    desc: 'leisure',
+    icon: 'wine'
+  },
+  {
+    _id: 'trv',
+    desc: 'travel',
+    icon: 'plane'
+  },
+  {
+    _id: 'shp',
+    desc: 'shopping',
+    icon: 'pricetags'
+  },
+  {
+    _id: 'bll',
+    desc: 'bills',
+    icon: 'calendar'
+  },
+  {
+    _id: 'oth',
+    desc: 'others',
+    icon: 'clipboard'
   }
 ];
 
