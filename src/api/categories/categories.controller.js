@@ -5,16 +5,6 @@ var controller = {
   getEntries: function (req, res) {
     return Categories.find()
       .populate('wallets', '_id')
-      .then((categories) => {
-        res.status(200).send(categories.map(category => {
-          return {
-            categoryId: category._id,
-            categoryName: category.desc,
-            categoryIcon: category.icon,
-            categoryWallets: category.wallets
-          };
-        }))
-      })
       .exec()
       .then(handler.respondWithResult(res))
       .catch(handler.handleError(res));
