@@ -5,7 +5,6 @@ var controller = require('./wallets.controller');
 var auth = require('../../services/auth/jwt');
 
 router.get('/', auth.optional, controller.getEntries);
-router.get('/:id', auth.required, controller.getTransactions);
 router.get('/user/:user', auth.required, controller.getMyWallets);
 router.get('/overview/:user', auth.required, controller.overview);
 router.post('/', auth.required, controller.create);

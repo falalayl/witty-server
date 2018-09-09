@@ -1,9 +1,12 @@
 var Transaction = require('./transactions.model');
 var handler = require('../../services/handler');
+var moment = require('moment');
+
 
 var controller = {
     getEntries: function (req, res) {
-        return Transaction.find()
+        var walletId = req.query.walletId;
+        return Transaction.find(walletId ? { walletId: walletId } : {})
             // .populate('first model', 'fields or minus fields')
             // .populate({ path: 'user', select: 'name' })
             // .populate({
@@ -32,13 +35,15 @@ var controller = {
         return Transaction.findById(req.params.id)
             .exec()
             .then(handler.handleEntityNotFound(res))
-            // .then((datas) => {
-            //     res.status(200).send({
-            //         id: datas._id,
-            //         name: datas.name
-            //     })
-            // })
-            .then(handler.respondWithResult(res))
+            .then((transaction) => {
+                res.status(200).send({
+                    _id: transaction._id,
+                    description: transaction.desc,
+                    amount: transaction.amount,
+                    createdAt: moment(transaction.createdAt).format('MMMM DD, YYYY - dddd, hh:mm A')
+                })
+            })
+            // .then(handler.respondWithResult(res))
             .catch(handler.handleError(res));
     },
     getMyTransactions: function (req, res) {

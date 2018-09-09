@@ -7,6 +7,16 @@ var m = month[n.getMonth()];
 var y = n.getFullYear();
 var period = m + " " + y;
 
+var view = (data) => {
+    return {
+        _id: data._id,
+        name: data.name,
+        amount: data.amount,
+        categoryId: data.categoryId,
+        transactions: data.transactions
+    }
+};
+
 var controller = {
     getEntries: function (req, res) {
         return Wallet.find()
@@ -17,6 +27,7 @@ var controller = {
                     return {
                         _id: wallet._id,
                         name: wallet.name,
+                        amount: wallet.amount,
                         transactions: wallet.transactions.length !== 0 ? wallet.transactions : 0,
                         period: wallet.period
                     };
@@ -24,21 +35,6 @@ var controller = {
             })
             // .then(handler.respondWithResult(res))
             .catch(handler.handleError(res));
-    },
-    getTransactions: function (req, res) {
-        return Wallet.findById(req.params.id)
-            .populate('transactions')
-            .exec()
-            .then(handler.handleEntityNotFound(res))
-            .then((wallet) => {
-                res.status(200).send({
-                    _id: wallet._id,
-                    name: wallet.name,
-                    transactions: wallet.transactions.length !== 0 ? wallet.transactions : 0
-                });
-            })
-            // .then(handler.respondWithResult(res))
-            .catch(handler.handleError(err));
     },
     getMyWallets: function (req, res) {
         var user = req.params.user
@@ -53,10 +49,9 @@ var controller = {
     },
     overview: function (req, res) {
         var user = req.params.user
-        return Wallet.find({ userId: user })
+        var period = req.query.period
+        return Wallet.find(period ? { userId: user, period: period } : { userId: user })
             .populate('transactions')
-            .populate('category')
-            .where('period', period)
             .exec()
             .then(handler.handleEntityNotFound(res))
             .then(wallets => {
@@ -71,27 +66,19 @@ var controller = {
                         budgetTotal = budgetTotal + wallet.amount;
                         totalExpenses = totalExpenses + walletExpenses;
                         return {
-                            walletId: wallet._id,
+                            walletType: wallet.type,
                             walletName: wallet.name,
                             walletAmount: wallet.amount,
-                            walletExpenses: walletExpenses,
-                            walletCategory: wallet.categoryId,
-                            walletCategory: wallet.category
+                            walletTransactions: walletExpenses,
+                            walletCategory: wallet.categoryId
                         };
                     }),
                     totalBudget: budgetTotal,
                     totalExpenses: totalExpenses,
-                    average: totalBudget / userWallets.length
+                    averageBudget: budgetTotal / wallets.length,
+                    period: period
                 }
                 res.send(data);
-
-                // var totalAmount = 0;
-                // var feed = wallet.foreach(amount => {
-                //   totalAmount = totalAmount + amount.amount
-                // });
-
-                // console.log(totalAmount);
-                // res.send(wallet);
             })
             // .then(handler.respondWithResult(res))
             .catch(handler.handleError(res));
