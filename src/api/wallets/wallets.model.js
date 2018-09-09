@@ -12,7 +12,6 @@ var WalletSchema = new Schema({
         type: String,
         ref: 'User',
         required: true,
-        ref: 'Budget'
     },
     type: {
         type: String,
@@ -33,6 +32,7 @@ var WalletSchema = new Schema({
     }
 },
     {
+        timestamps: true,
         id: false,
         versionKey: false,
         toJSON: {
