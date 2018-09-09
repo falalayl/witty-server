@@ -114,9 +114,27 @@ var controller = {
       .then(handler.handleEntityNotFound(res))
       .then(handler.respondWithResult(res, 201))
       .catch(handler.handleError(res));
+  },
+  changePassword: function (req, res, next) {
+    var oldPassword = req.body.oldPassword
+    var newPassword = req.body.newPassword
+    console.log(req.body);
+
+    return Users.findById(req.params.id, function (err, user) {
+      if (user) {
+        if (user.validatePassword(oldPassword)) {
+          user.setPassword(newPassword, () => {
+            user.save((err) => {
+              if (err) return res.status(400).send({ message: err });
+
+            });
+          });
+        }
+        res.status(400).send({ error: 'passwords do not match' });
+      }
+      res.status(404).send({ error: err });
+    });
   }
-
-
 };
 
 module.exports = controller;
