@@ -28,7 +28,7 @@ var TransactionSchema = new Schema({
         },
         options: {
             sort: {
-                date: -1
+                createdAt: 1
             }
         }
 

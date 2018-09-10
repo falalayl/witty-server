@@ -14,6 +14,7 @@ module.exports = function (app) {
   app.use('/api/budget', require('./api/budget'));
   app.use('/api/wallets', require('./api/wallets'));
   app.use('/api/transactions', require('./api/transactions'));
+  app.use('/api/archives', require('./api/archives'));
   // app.use('/api/users', expressAccessToken, masterKey, require('./api/users'));
   app.use('/api/categories', require('./api/categories'));
 };
