@@ -37,11 +37,12 @@ var controller = {
             .catch(handler.handleError(res));
     },
     getMyWallets: function (req, res) {
+        var period = req.query.period
         var user = req.params.user
-        return Wallet.find({ userId: user })
+        return Wallet.find(period ? { userId: user, period: period }: {userId:user})
             .populate('transactions')
             .populate('category', '-wallets')
-            .where('period', period)
+            // .where('period', period)
             .exec()
             .then(handler.handleEntityNotFound(res))
             .then(handler.respondWithResult(res))
@@ -70,7 +71,8 @@ var controller = {
                             walletName: wallet.name,
                             walletAmount: wallet.amount,
                             walletTransactions: walletExpenses,
-                            walletCategory: wallet.categoryId
+                            walletCategory: wallet.categoryId,
+                            period: wallet.period
                         };
                     }),
                     totalBudget: budgetTotal,
