@@ -31,8 +31,7 @@ var controller = {
                 var grandTotalExpenses = 0;
                 var grandTotalSavings = 0;
                 var data = {
-
-                    Archives: archives.map(archive => {
+                    x: archives.map(archive => {
                         grandTotalBudget = grandTotalBudget + archive.totalBudget
                         grandTotalExpenses = grandTotalExpenses + archive.totalExpenses
                         grandTotalSavings = grandTotalSavings + archive.totalSavings
@@ -44,7 +43,7 @@ var controller = {
                             extraSavings: archive.totalBudget - (archive.totalExpenses + archive.totalSavings)
                         }
                     }),
-                    grandTotalBudget: grandTotalBudget,
+                    grandTotalBudget: grandTotalBudget ? grandTotalBudget: 0,
                     grandTotalExpenses: grandTotalExpenses,
                     grandTotalSavings: grandTotalSavings,
                     averageMonthlyBudget: grandTotalBudget / archives.length,
