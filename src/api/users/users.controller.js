@@ -22,7 +22,7 @@ var controller = {
           password: 'is required',
         },
       });
-    }
+    }  
 
     var finalUser = new Users(user);
 
@@ -30,8 +30,8 @@ var controller = {
 
     return finalUser.save()
       .then(() => res.json({ user: finalUser.toAuthJSON() }))
-      .catch((err) => res.status(400).send(err.message));
-    //.catch((err) => res.status(400).send({ errors: err.errors }));
+      // .catch((err) => res.status(400).send(err.message));
+      .catch((err) => res.status(400).send(err));
   },
   login: function (req, res, next) {
     var { body: { user } } = req;
@@ -74,7 +74,8 @@ var controller = {
     });
   },
   me: function (req, res, next) {
-    var { payload: { id } } = req;
+    var id = req.params.id
+    // var { payload: { id } } = req;
 
     return Users.findById(id)
       .then((user) => {
@@ -115,25 +116,35 @@ var controller = {
       .then(handler.respondWithResult(res, 201))
       .catch(handler.handleError(res));
   },
-  changePassword: function (req, res, next) {
+  changePassword: function (req, res) {
+    var id = req.params.id
     var oldPassword = req.body.oldPassword
     var newPassword = req.body.newPassword
-    console.log(req.body);
+    var confirmPassword = req.body.confirmPassword
 
-    return Users.findById(req.params.id, function (err, user) {
-      if (user) {
-        if (user.validatePassword(oldPassword)) {
-          user.setPassword(newPassword, () => {
-            user.save((err) => {
-              if (err) return res.status(400).send({ message: err });
+    if (confirmPassword !== newPassword) {
+      return res.status(400).send('New password did not match');
+    }
+    if (oldPassword === newPassword) {
+      return res.status(400).send('New password cannot be the same as current password');
+    }
 
-            });
-          });
+    return Users.findOne({ _id: id })
+      .then(function (user) {
+        if (!user) {
+          return res.status(400).send('User not found!');
         }
-        res.status(400).send({ error: 'passwords do not match' });
-      }
-      res.status(404).send({ error: err });
-    });
+
+        if (!user.validatePassword(oldPassword)) {
+          return res.status(400).send('Current Password did not match');
+        }
+
+        user.setPassword(newPassword);
+
+        return user.save()
+          .then(() => res.json(user.toAuthJSON()))
+          .catch((err) => res.status(400).send(err.message));
+      });
   }
 };
 

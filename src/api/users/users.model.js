@@ -1,9 +1,6 @@
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
-
-var Budget = require('../budget/budget.model');
-
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
@@ -21,7 +18,6 @@ var UserSchema = new Schema({
   salt: String,
 },
   {
-    id: false,
     versionKey: false,
     toJSON: {
       virtuals: true
@@ -53,8 +49,9 @@ UserSchema
   .validate(function (value) {
     return this.constructor.findOne({ email: value }).exec()
       .then(user => {
+        console.log(user);
         if (user) {
-          if (this._id === user._id) {
+          if (this.id === user.id) {
             return true;
           }
           return false;
@@ -66,23 +63,9 @@ UserSchema
       });
   }, 'The specified email address is already in use.');
 
-var validatePresenceOf = function (value) {
-  return value && value.length;
-};
-
-UserSchema
-  .post('save', (doc) => {
-    Budget.create({
-      userId: doc._id,
-      budget: []
-    })
-      .then(() => {
-        console.log('Astig');
-      })
-      .catch(() => {
-        console.log('Yun lang');
-      });
-  });
+// var validatePresenceOf = function (value) {
+//   return value && value.length;
+// };
 
 UserSchema.methods.setPassword = function (password) {
   this.salt = crypto.randomBytes(16).toString('hex');
