@@ -11,7 +11,6 @@ var masterKey = function (req, res, next) {
 module.exports = function (app) {
   app.use('/', require('./api/main'));
   app.use('/api/users', require('./api/users'));
-  app.use('/api/budget', require('./api/budget'));
   app.use('/api/wallets', require('./api/wallets'));
   app.use('/api/transactions', require('./api/transactions'));
   app.use('/api/archives', require('./api/archives'));
