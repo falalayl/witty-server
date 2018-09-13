@@ -2,6 +2,9 @@
   "name": "wittywallet",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "8.12.0"
+  },
   "scripts": {
     "start": "npm run build && node dist/src/index.js",
     "copy:env": "cp ./.env.example dist/.env.example",
