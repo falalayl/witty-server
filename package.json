@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "start": "npm run build && node dist/src/index.js",
     "copy:env": "cp ./.env.example dist/.env.example",
     "build:babel": "babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log,./playground --copy-files",
     "build": "rimraf dist/ && npm run build:babel && npm run copy:env",
-    "start": "npm run build && node dist/src/index.js",
     "babel-node": "babel-node --presets=latest",
     "serve": "nodemon --exec npm run babel-node -- ./src/index.js",
     "deploy:commit": "git add . && git commit -am.",
