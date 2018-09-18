@@ -3,9 +3,7 @@ var handler = require('../../services/handler');
 
 var controller = {
     getEntries: (req, res) => {
-        var period = req.query.period
-        var user = req.query.user
-        return Archives.find(period, user ? { period: period, userId: user } : {})
+        return Archives.find()
             .exec()
             .then((archives) => {
                 res.status(200).send(archives.map(archive => {
@@ -21,9 +19,26 @@ var controller = {
             // .then(handler.respondWithResult(res))
             .catch(handler.handleError(res));
     },
+    getEntry: function (req, res) {
+        return Transaction.findById(req.params.id)
+            .exec()
+            .then(handler.handleEntityNotFound(res))
+            .then((archive) => {
+                res.status(200).send({
+                    _id: archive._id,
+                    totalBudget: archive.totalBudget,
+                    totalExpenses: archive.totalExpenses,
+                    totalSavings: archive.totalSavings,
+                    extraSavings: archive.totalBudget - (archive.totalExpenses + archive.totalSavings)
+                });
+            })
+            // .then(handler.respondWithResult(res))
+            .catch(handler.handleError(res));
+    },
     getOverview: (req, res) => {
+        var period = req.query.period
         var userId = req.params.user
-        return Archives.find({ userId: userId })
+        return Archives.find(period ? { userId: userId, period: period } : { userId: userId })
             .exec()
             .then(handler.handleEntityNotFound(res))
             .then((archives) => {
@@ -43,7 +58,7 @@ var controller = {
                             extraSavings: archive.totalBudget - (archive.totalExpenses + archive.totalSavings)
                         }
                     }),
-                    grandTotalBudget: grandTotalBudget ? grandTotalBudget: 0,
+                    grandTotalBudget: grandTotalBudget ? grandTotalBudget : 0,
                     grandTotalExpenses: grandTotalExpenses,
                     grandTotalSavings: grandTotalSavings,
                     averageMonthlyBudget: grandTotalBudget / archives.length,

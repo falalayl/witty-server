@@ -43,13 +43,14 @@ app.use(function (req, res, next) {
   err.status = 404;
   next(err);
 });
-  
+
 app.use(function (err, req, res, next) {
+  console.log(req);
   if (err.name === 'UnauthorizedError') {
-    res.status(401).send('Unauthorized Access');
+    res.status(401).send(err);
   }
 });
-  
+
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development

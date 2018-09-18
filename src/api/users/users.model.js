@@ -18,13 +18,7 @@ var UserSchema = new Schema({
   salt: String,
 },
   {
-    versionKey: false,
-    toJSON: {
-      virtuals: true
-    },
-    toObject: {
-      virtuals: true
-    }
+    versionKey: false
   });
 
 // Validate empty email
@@ -34,7 +28,7 @@ UserSchema
     return email.length;
   }, 'Email cannot be blank');
 
-// // Validate empty password
+// Validate empty password
 // UserSchema
 //   .path('password')
 //   .validate(function(password) {
@@ -42,7 +36,6 @@ UserSchema
 //   }, 'Password cannot be blank');
 
 // Validate email is not taken
-
 
 UserSchema
   .path('email')
@@ -63,10 +56,6 @@ UserSchema
       });
   }, 'The specified email address is already in use.');
 
-// var validatePresenceOf = function (value) {
-//   return value && value.length;
-// };
-
 UserSchema.methods.setPassword = function (password) {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
@@ -80,7 +69,7 @@ UserSchema.methods.validatePassword = function (password) {
 UserSchema.methods.generateJWT = function () {
   var today = new Date();
   var expirationDate = new Date(today);
-  expirationDate.setDate(today.getDate() + 30);
+  expirationDate.setDate(today.getDay() + 30);
 
   return jwt.sign({
     email: this.email,
@@ -95,6 +84,7 @@ UserSchema.methods.toAuthJSON = function () {
     email: this.email,
     name: this.name,
     token: this.generateJWT(),
+    exp: this.exp
   };
 };
 

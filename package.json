@@ -2,14 +2,11 @@
   "name": "wittywallet",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": "8.12.0"
-  },
   "scripts": {
     "start": "npm run build && node dist/src/index.js",
-    "copy:env": "cp ./.env.example dist/.env.example",
+    "copy:env": "cp .env.example dist/.env.example",
     "build:babel": "babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log,./playground --copy-files",
-    "build": "rimraf dist/ && npm run build:babel && npm run copy:env",
+    "build": "rimraf dist/ && npm run build:babel",
     "babel-node": "babel-node --presets=latest",
     "serve": "nodemon --exec npm run babel-node -- ./src/index.js",
     "deploy:commit": "git add . && git commit -am.",
@@ -42,7 +39,8 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-latest": "^6.24.1",
-    "concat": "^1.0.3",
+    "copy": "^0.3.2",
+    "cp": "^0.2.0",
     "dotenv-safe": "^6.0.0",
     "nodemon": "^1.18.3",
     "rimraf": "^2.6.2"
