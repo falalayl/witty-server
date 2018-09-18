@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "npm run build && node dist/src/index.js",
+    
+    "start": "nodemon --exec npm run babel-node -- ./src/index.js",
     "copy:env": "cp .env.example dist/.env.example",
     "build:babel": "babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log,./playground --copy-files",
     "build": "rimraf dist/ && npm run build:babel",
