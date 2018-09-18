@@ -34,8 +34,7 @@
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "request": "^2.87.0",
-    "request-promise": "^4.2.2",
-    "rimraf": "^2.6.2"
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -43,7 +42,8 @@
     "copy": "^0.3.2",
     "cp": "^0.2.0",
     "dotenv-safe": "^6.0.0",
-    "nodemon": "^1.18.3"
+    "nodemon": "^1.18.3",
+    "rimraf": "^2.6.2"
   },
   "babel": {
     "presets": [
